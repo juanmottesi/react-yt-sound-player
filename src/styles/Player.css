@@ -1,0 +1,37 @@
+/* add css module styles here (optional) */
+#player {
+  display: none;
+}
+
+.playerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionPanelContainer {
+  display: flex;
+}
+
+.durationRange {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+}
+
+.durationRange > span {
+  flex: 1;
+  margin-left: 8px;
+}
+
+.durationRange > span:first-of-type {
+  text-align: end;
+  margin-right: 8px;
+  margin-left: 0px;
+}
+
+.durationRange > input {
+  flex: 4
+}

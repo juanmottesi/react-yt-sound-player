@@ -1,0 +1,30 @@
+.playerButton {
+  border: none;
+  background-color: transparent;
+}
+
+.playerButton:hover {
+  transform: scale(1.1);
+}
+
+.play > svg , .pause > svg {
+  height: 40px;
+  width: 40px;
+}
+
+.prev {
+  transform: rotate(180deg) translateY(3px);
+}
+.prev:hover {
+  transform: scale(1.1) rotate(180deg) translateY(3px);
+}
+
+.prev > svg {
+  height: 20px;
+  width: 20px;
+}
+
+.next > svg {
+  height: 20px;
+  width: 20px;
+}
