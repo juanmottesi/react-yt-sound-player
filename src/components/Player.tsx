@@ -13,6 +13,8 @@ const Player = ({ songs = [], start = 0 }) => {
   const [playerState, setPlayerState] = useState<PlayerStateType>(UNSTARTED)
   const [currentTime, setCurrentTime] = useState(0)
 
+  // console.log(player);
+
   const handlePlaying = () => setDuration(player.getDuration())
   const handleEnd = () => nextSong()
   const handleStateChange = (event:any) => setPlayerState(event.data)
@@ -21,11 +23,11 @@ const Player = ({ songs = [], start = 0 }) => {
     const handleStates = {
       [PLAYING]: handlePlaying,
       [ENDED]: handleEnd,
-      [PAUSED]: console.log,
-      [BUFFERING]: console.log,
-      [VIDEOCUED]: console.log,
-      [UNSTARTED]: console.log
-    }
+      [PAUSED]: () => console.log(PAUSED),
+      [BUFFERING]: () => console.log(BUFFERING),
+      [VIDEOCUED]: () => console.log(VIDEOCUED),
+      [UNSTARTED]: () => console.log(UNSTARTED),
+    };
     handleStates[playerState]()
   }, [playerState])
 
@@ -44,6 +46,16 @@ const Player = ({ songs = [], start = 0 }) => {
     )
   }
 
+  const loadPlayer = () => {
+    const tag = document.createElement("script");
+    tag.id = "youtubeApi";
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName("script")[0];
+    // eslint-disable-next-line no-unused-expressions
+    firstScriptTag?.parentNode?.insertBefore(tag, firstScriptTag);
+    window.onYouTubeIframeAPIReady = () => startPlayer();
+  }
+
   useEffect(() => {
     const progressInterval = setInterval(() => {
       if (player) {
@@ -53,20 +65,12 @@ const Player = ({ songs = [], start = 0 }) => {
     return () => clearInterval(progressInterval)
   }, [player])
 
-  useEffect(() => {
-    const tag = document.createElement('script')
-    tag.id = 'youtubeApi'
-    tag.src = 'https://www.youtube.com/iframe_api'
-    const firstScriptTag = document.getElementsByTagName('script')[0]
-    // eslint-disable-next-line no-unused-expressions
-    firstScriptTag?.parentNode?.insertBefore(tag, firstScriptTag)
-    window.onYouTubeIframeAPIReady = () => startPlayer()
-  }, [])
+  useEffect(() => loadPlayer(), [])
 
   useEffect(() => {
-    player.loadVideoById(songs[0], 0, 'small')
-    setCurrentSong(0)
-  }, [songs])
+    player.loadVideoById(songs[0], 0, "small");
+    setCurrentSong(0);
+  }, [songs]);
 
   const play = () => player.playVideo()
   const pause = () => player.pauseVideo()
@@ -95,12 +99,22 @@ const Player = ({ songs = [], start = 0 }) => {
       <div id="player" />
       <div className="actionPanelContainer">
         <PlayerButton onClick={prevSong} type="prev" />
-        {playerState !== PLAYING ? <PlayerButton onClick={play} type="play" /> : <PlayerButton onClick={pause} type="pause" />}
+        {playerState !== PLAYING ? (
+          <PlayerButton onClick={play} type="play" />
+        ) : (
+          <PlayerButton onClick={pause} type="pause" />
+        )}
         <PlayerButton onClick={nextSong} type="next" />
       </div>
       <div className="durationRange">
         <span>{parseDuration(currentTime)}</span>
         <input
+          className="input-bar"
+          style={{
+            background: `linear-gradient(to right, #959595 0%, #959595 ${
+              (currentTime * 100) / (duration || 1)
+            }%, #e1e1e1 ${(currentTime * 100) / (duration || 1)}%, #e1e1e1 100%)`,
+          }}
           onChange={seek}
           type="range"
           min="0"
@@ -111,7 +125,7 @@ const Player = ({ songs = [], start = 0 }) => {
         <span>{parseDuration(duration)}</span>
       </div>
     </div>
-  )
+  );
 }
 
 export default Player
