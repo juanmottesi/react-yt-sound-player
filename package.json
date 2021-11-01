@@ -1,7 +1,7 @@
 {
-  "name": "youtube-sound-player",
+  "name": "react-yt-sound-player",
   "version": "1.0.0",
-  "description": "Youtube sound player",
+  "description": "React sound player",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
   "types": "lib/index.d.ts",
